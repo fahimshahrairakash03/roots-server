@@ -21,20 +21,22 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
-// client.connect((err) => {
-//   const collection = client.db("test").collection("devices");
-//   // perform actions on the collection object
-//   client.close();
-// });
 
 async function run() {
   try {
     const serviceCollection = client.db("rootsServices").collection("services");
 
-    app.get("/services", async (req, res) => {
+    app.get("/service", async (req, res) => {
       const query = {};
       const cursor = serviceCollection.find(query);
       const result = await cursor.limit(3).toArray();
+      res.send(result);
+    });
+
+    app.get("/services", async (req, res) => {
+      const query = {};
+      const cursor = serviceCollection.find(query);
+      const result = await cursor.toArray();
       res.send(result);
     });
   } finally {
