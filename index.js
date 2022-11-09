@@ -50,10 +50,11 @@ async function run() {
     });
 
     app.get("/reviews", async (req, res) => {
-      console.log(req.query.id);
       let query = {};
       if (req.query.service) {
         query = { serviceName: req.query.service };
+      } else if (req.query.email) {
+        query = { email: req.query.email };
       }
 
       const cursor = reviewCollection.find(query);
@@ -64,6 +65,13 @@ async function run() {
     app.post("/reviews", async (req, res) => {
       const review = req.body;
       const result = await reviewCollection.insertOne(review);
+      res.send(result);
+    });
+
+    app.delete("/reviews/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await reviewCollection.deleteOne(query);
       res.send(result);
     });
   } finally {
