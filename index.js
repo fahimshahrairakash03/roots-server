@@ -13,9 +13,6 @@ app.get("/", (req, res) => {
   res.send("roots server is running");
 });
 
-//user: dbuser8
-//pass: QmzV2Af2fNdOIXAP
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.4r8e4ne.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -63,7 +60,7 @@ async function run() {
         query = { email: req.query.email };
       }
 
-      const cursor = reviewCollection.find(query);
+      const cursor = reviewCollection.find(query).sort({ time: -1 });
       const result = await cursor.toArray();
       res.send(result);
     });
